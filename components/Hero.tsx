@@ -12,7 +12,7 @@ const GreenArrow = () => (
 );
 
 const ClawLobster = () => (
-  <span className="text-2xl leading-none">🦞</span>
+  <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/openclaw-dark.png" alt="OpenClaw" width={28} height={28} />
 );
 
 const SocialIcons = () => (
@@ -91,7 +91,7 @@ export default function Hero() {
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-[#08090E]/80 backdrop-blur-xl border-b border-[#1A1D2B]/50">
         <div className="flex items-center gap-2">
-          <span className="text-2xl">🦞</span>
+          <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/openclaw-dark.png" alt="OpenClaw" width={28} height={28} />
           <span className="font-semibold text-white">OpenClaw</span>
         </div>
         <a href="/connect" className="px-4 py-2 text-sm text-gray-400 hover:text-white border border-[#1A1D2B] rounded-lg hover:border-[#2A2D3B] transition-all">
