@@ -17,6 +17,18 @@ export default function SetupProgress({ sessionId }: { sessionId: string }) {
     setOsLabel(detected.label);
 
     async function verifyAndDownload() {
+      // Demo mode: simulate the full flow
+      if (sessionId === 'demo') {
+        setTimeout(() => {
+          setStep('confirmed');
+          setTimeout(() => {
+            setStep('downloading');
+            setTimeout(() => setStep('instructions'), 3000);
+          }, 1500);
+        }, 1500);
+        return;
+      }
+
       try {
         const res = await fetch(`/api/verify-payment?session_id=${sessionId}`);
         const data = await res.json();

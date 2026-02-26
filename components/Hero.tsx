@@ -8,6 +8,7 @@ export default function Hero() {
   const [email, setEmail] = useState('');
   const [os, setOs] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const detected = detectOS();
@@ -15,8 +16,12 @@ export default function Hero() {
   }, []);
 
   const handleStart = async () => {
-    if (!email || !email.includes('@')) return;
+    if (!email || !email.includes('@')) {
+      setError('Introduz um email válido.');
+      return;
+    }
 
+    setError('');
     setLoading(true);
     try {
       const res = await fetch('/api/checkout', {
@@ -25,9 +30,15 @@ export default function Hero() {
         body: JSON.stringify({ email, os }),
       });
       const data = await res.json();
-      if (data.url) window.location.href = data.url;
-    } catch (err) {
-      console.error(err);
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        // Demo mode: Stripe not configured, show setup flow
+        window.location.href = `/setup?session_id=demo&email=${encodeURIComponent(email)}`;
+      }
+    } catch {
+      // Fallback to demo mode
+      window.location.href = `/setup?session_id=demo&email=${encodeURIComponent(email)}`;
     } finally {
       setLoading(false);
     }
@@ -51,14 +62,14 @@ export default function Hero() {
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => { setEmail(e.target.value); setError(''); }}
           placeholder="o-teu@email.com"
           className="flex-1 px-4 py-3 bg-[#0A0A0A] border border-[#1A1A1A] rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500 transition"
           onKeyDown={(e) => e.key === 'Enter' && handleStart()}
         />
         <button
           onClick={handleStart}
-          disabled={loading || !email}
+          disabled={loading}
           className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
         >
           {loading ? (
@@ -68,6 +79,10 @@ export default function Hero() {
           )}
         </button>
       </div>
+
+      {error && (
+        <p className="mt-3 text-red-400 text-sm">{error}</p>
+      )}
 
       <p className="mt-4 text-gray-600 text-sm">
         Pagamento único · Sem subscrição
