@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { detectOS } from '@/lib/detectOS';
-import { ArrowRight, Loader2, Zap, MessageSquare, Bot, Users } from 'lucide-react';
+import { ArrowRight, Loader2, Zap, MessageSquare, Bot, Users, TrendingUp, User, Share2, Send } from 'lucide-react';
 
 export default function Hero() {
   const [email, setEmail] = useState('');
@@ -99,11 +99,12 @@ export default function Hero() {
         {/* Templates */}
         <div className="mt-8">
           <p className="text-xs text-gray-600 uppercase tracking-widest mb-4">Ou começa com um template</p>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { icon: MessageSquare, label: 'Assistente Pessoal' },
-              { icon: Bot, label: 'Suporte ao Cliente' },
-              { icon: Users, label: 'Gestor de Vendas' },
+              { icon: TrendingUp, label: 'Stock & Crypto Trader' },
+              { icon: User, label: 'Assistente Pessoal' },
+              { icon: Share2, label: 'Redes Sociais' },
+              { icon: Send, label: 'WhatsApp / Telegram' },
             ].map(({ icon: Icon, label }) => (
               <button
                 key={label}
