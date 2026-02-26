@@ -142,7 +142,6 @@ export default function Hero() {
 
         {/* Templates */}
         <div className="mt-8">
-          <p className="text-xs text-gray-600 uppercase tracking-widest mb-4">Ou começa com um template</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               { content: <GreenArrow />, label: 'Stock & Crypto Trader' },
