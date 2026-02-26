@@ -11,14 +11,15 @@ type SetupStep = 'verifying' | 'confirmed' | 'downloading' | 'instructions';
 export default function SetupProgress({ sessionId }: { sessionId: string }) {
   const [step, setStep] = useState<SetupStep>('verifying');
   const [osLabel, setOsLabel] = useState('');
+  const isDemo = sessionId === 'demo';
 
   useEffect(() => {
     const detected = detectOS();
     setOsLabel(detected.label);
 
     async function verifyAndDownload() {
-      // Demo mode: simulate the full flow
-      if (sessionId === 'demo') {
+      if (isDemo) {
+        // Direct flow without payment verification
         setTimeout(() => {
           setStep('confirmed');
           setTimeout(() => {
@@ -49,13 +50,13 @@ export default function SetupProgress({ sessionId }: { sessionId: string }) {
     }
 
     if (sessionId) verifyAndDownload();
-  }, [sessionId]);
+  }, [sessionId, isDemo]);
 
   const steps = [
-    { id: 'verifying', label: 'A verificar pagamento...', Icon: Loader2, done: step !== 'verifying' },
-    { id: 'confirmed', label: 'Pagamento confirmado', Icon: Check, done: ['downloading', 'instructions'].includes(step) },
-    { id: 'downloading', label: `A descarregar para ${osLabel}`, Icon: Download, done: step === 'instructions' },
-    { id: 'instructions', label: 'Abre o ficheiro e pronto!', Icon: Smartphone, done: false },
+    { id: 'verifying', label: 'A preparar tudo...', Icon: Loader2, done: step !== 'verifying' },
+    { id: 'confirmed', label: 'Conta criada com sucesso', Icon: Check, done: ['downloading', 'instructions'].includes(step) },
+    { id: 'downloading', label: `A preparar download para ${osLabel}`, Icon: Download, done: step === 'instructions' },
+    { id: 'instructions', label: 'Pronto para instalar!', Icon: Smartphone, done: false },
   ];
 
   return (
@@ -104,6 +105,12 @@ export default function SetupProgress({ sessionId }: { sessionId: string }) {
             </button>
           </motion.div>
         )}
+
+        <div className="text-center">
+          <a href="/" className="text-gray-600 hover:text-gray-400 text-sm transition-colors">
+            Voltar ao início
+          </a>
+        </div>
       </div>
     </div>
   );

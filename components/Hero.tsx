@@ -23,6 +23,8 @@ export default function Hero() {
 
     setError('');
     setLoading(true);
+
+    // Try Stripe first, fallback to direct setup
     try {
       const res = await fetch('/api/checkout', {
         method: 'POST',
@@ -30,18 +32,16 @@ export default function Hero() {
         body: JSON.stringify({ email, os }),
       });
       const data = await res.json();
-      if (data.url) {
+      if (data.url && !data.url.includes('placeholder')) {
         window.location.href = data.url;
-      } else {
-        // Demo mode: Stripe not configured, show setup flow
-        window.location.href = `/setup?session_id=demo&email=${encodeURIComponent(email)}`;
+        return;
       }
     } catch {
-      // Fallback to demo mode
-      window.location.href = `/setup?session_id=demo&email=${encodeURIComponent(email)}`;
-    } finally {
-      setLoading(false);
+      // Stripe not configured
     }
+
+    // Direct flow (payments not yet configured)
+    window.location.href = `/setup?session_id=demo&email=${encodeURIComponent(email)}`;
   };
 
   return (
