@@ -10,11 +10,19 @@ export const FAQ_ITEMS = [
   },
   {
     question: 'Preciso de saber programar?',
-    answer: 'Não. Zero. Nada. Metes o email, pagas, e o OpenClaw instala-se sozinho no teu computador. Só precisas de apontar a câmara do telemóvel ao QR code do WhatsApp.',
+    answer: 'Não. Zero. Nada. Metes o email, pagas, e o OpenClaw instala-se sozinho no teu computador. Só precisas de colar a tua API key de IA (OpenAI, Claude ou Gemini) e apontar a câmara do telemóvel ao QR code do WhatsApp.',
+  },
+  {
+    question: 'O que é uma API key?',
+    answer: 'É uma chave que liga o OpenClaw a um serviço de inteligência artificial (como o ChatGPT ou o Claude). Crias uma conta gratuita no provedor, geras a chave, e colas no OpenClaw. Nós guiamos-te passo a passo durante a instalação.',
   },
   {
     question: 'Funciona em que sistemas?',
     answer: 'Windows, macOS e Linux. O site deteta automaticamente o teu sistema operativo e descarrega a versão correta.',
+  },
+  {
+    question: 'Os meus dados estão seguros?',
+    answer: 'Sim. O OpenClaw corre 100% no teu computador. As tuas mensagens, contactos e API key nunca saem da tua máquina. Não temos acesso a nada.',
   },
   {
     question: 'E se precisar de ajuda?',
@@ -25,13 +33,13 @@ export const FAQ_ITEMS = [
 export const FEATURES = [
   {
     icon: 'Zap',
-    title: 'Instalação em 1 segundo',
-    description: 'Sem configurações. Sem terminal. Abre e funciona.',
+    title: 'Instalação automática',
+    description: 'Descarrega, instala e abre sozinho. Sem terminal. Sem configurações.',
   },
   {
     icon: 'MessageSquare',
     title: 'WhatsApp com IA',
-    description: 'Respostas automáticas inteligentes. O teu assistente pessoal.',
+    description: 'Liga o teu ChatGPT, Claude ou Gemini. Respostas inteligentes automáticas.',
   },
   {
     icon: 'Shield',
@@ -43,17 +51,17 @@ export const FEATURES = [
 export const STEPS = [
   {
     number: '1',
-    title: 'Mete o teu email',
-    description: 'Só precisamos do teu email para ativar a licença.',
+    title: 'Mete o teu email e paga',
+    description: 'Pagamento único de 9,99 USDC. Sem subscrições.',
   },
   {
     number: '2',
-    title: 'Paga 9,99 USDC',
-    description: 'Pagamento único. Sem subscrições. Sem surpresas.',
+    title: 'Cola a tua API key',
+    description: 'Escolhe o teu provedor de IA (OpenAI, Claude ou Gemini) e cola a chave. Nós explicamos tudo.',
   },
   {
     number: '3',
-    title: 'Nós tratamos do resto',
-    description: 'O OpenClaw descarrega, instala e configura tudo sozinho.',
+    title: 'Aponta a câmara e pronto',
+    description: 'O OpenClaw abre automaticamente. Sincroniza o WhatsApp com o QR code e está feito.',
   },
 ];
