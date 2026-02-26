@@ -21,8 +21,8 @@ export default function Features() {
               key={feature.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.15 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ delay: i * 0.15, duration: 0.5 }}
               className="p-6 rounded-2xl bg-[#0A0A0A] border border-[#1A1A1A] hover:border-[#2A2A2A] transition-colors"
             >
               <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center mb-4">

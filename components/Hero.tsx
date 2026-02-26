@@ -96,6 +96,15 @@ export default function Hero() {
           ✓
         </p>
       )}
+
+      <div className="mt-8 pt-6 border-t border-[#1A1A1A] w-full max-w-md">
+        <a
+          href="/connect"
+          className="text-gray-500 hover:text-blue-400 text-sm transition-colors"
+        >
+          Já tenho o OpenClaw instalado — Conectar WhatsApp
+        </a>
+      </div>
     </section>
   );
 }
