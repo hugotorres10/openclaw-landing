@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
+  --background: #08090E;
+  --foreground: #E8E8ED;
+  --card-bg: #0D0F17;
+  --card-border: #1A1D2B;
+  --muted: #6B7280;
+  --accent: #3B82F6;
 }
 
 @theme inline {
@@ -19,4 +23,23 @@ body {
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Aurora gradient glow */
+.aurora-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.aurora-bg::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 600px;
+  background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 30%, rgba(236, 72, 153, 0.06) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }

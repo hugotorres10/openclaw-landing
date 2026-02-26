@@ -11,12 +11,13 @@ export default function FAQ() {
   return (
     <section className="py-24 px-6">
       <div className="max-w-2xl mx-auto">
-        <h2 className="text-3xl font-bold text-white text-center mb-12">Perguntas frequentes</h2>
+        <h2 className="text-3xl font-bold text-white text-center mb-4">Perguntas frequentes</h2>
+        <p className="text-gray-500 text-center mb-12">Tudo o que precisas de saber.</p>
         <div className="space-y-3">
           {FAQ_ITEMS.map((item, i) => (
             <div
               key={i}
-              className="rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] overflow-hidden"
+              className="rounded-xl border border-[#1A1D2B] bg-[#0D0F17] overflow-hidden hover:border-[#2A2D3B] transition-all"
             >
               <button
                 onClick={() => setOpen(open === i ? null : i)}
@@ -37,7 +38,7 @@ export default function FAQ() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <p className="px-5 pb-5 text-gray-400 leading-relaxed">{item.answer}</p>
+                    <p className="px-5 pb-5 text-gray-400 text-sm leading-relaxed">{item.answer}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
