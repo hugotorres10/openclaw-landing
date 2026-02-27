@@ -1,0 +1,118 @@
+const pt = {
+  // Navigation
+  'nav.alreadyInstalled': 'J\u00e1 tenho instalado',
+  'nav.backToSite': 'Voltar ao site',
+  'nav.backToHome': 'Voltar ao in\u00edcio',
+
+  // Hero
+  'hero.title1': 'O teu WhatsApp com IA,',
+  'hero.title2': 'a funcionar 24/7',
+  'hero.subtitle': 'Mete o email e o OpenClaw trata do resto. Respostas autom\u00e1ticas, gest\u00e3o de contactos, websites, redes sociais \u2014 tudo no piloto autom\u00e1tico.',
+  'hero.emailPlaceholder': 'o-teu@email.com',
+  'hero.cta': 'Come\u00e7ar',
+  'hero.usedBy': 'Usado por',
+  'hero.users': 'utilizadores',
+  'hero.runs247': 'Corre 24/7',
+  'hero.onYourPC': 'No teu computador',
+  'hero.yourData': 'Os teus dados',
+  'hero.staysLocal': 'Ficam na tua m\u00e1quina',
+  'hero.anyAI': 'Qualquer IA',
+  'hero.detectedOS': 'Detet\u00e1mos que usas',
+  'hero.invalidEmail': 'Introduz um email v\u00e1lido.',
+  'hero.emailFirst': 'Introduz o email primeiro.',
+
+  // Templates
+  'templates.trader': 'Stock & Crypto Trader',
+  'templates.assistant': 'Assistente Pessoal',
+  'templates.social': 'Redes Sociais',
+  'templates.messaging': 'WhatsApp / Telegram',
+
+  // Features
+  'features.title': 'Tudo o que precisas',
+  'features.subtitle': 'O OpenClaw automatiza o teu WhatsApp com intelig\u00eancia artificial. Zero configura\u00e7\u00e3o.',
+  'features.autoInstall': 'Instala\u00e7\u00e3o autom\u00e1tica',
+  'features.autoInstallDesc': 'Descarrega, instala e abre sozinho. Sem terminal. Sem configura\u00e7\u00f5es.',
+  'features.whatsappAI': 'WhatsApp com IA',
+  'features.whatsappAIDesc': 'Liga o teu ChatGPT, Claude ou Gemini. Respostas inteligentes autom\u00e1ticas.',
+  'features.privacy': 'Privacidade total',
+  'features.privacyDesc': 'Tudo corre no teu computador. Os teus dados nunca saem da tua m\u00e1quina.',
+
+  // How It Works
+  'howItWorks.title': 'Como funciona?',
+  'howItWorks.subtitle': 'Tr\u00eas passos. Sem complica\u00e7\u00f5es.',
+  'howItWorks.step1': 'Mete o teu email e paga',
+  'howItWorks.step1Desc': 'Pagamento \u00fanico de \u20ac9,99. Pre\u00e7o adaptado \u00e0 tua moeda local.',
+  'howItWorks.step2': 'Cola a tua API key',
+  'howItWorks.step2Desc': 'Escolhe o teu provedor de IA (OpenAI, Claude ou Gemini) e cola a chave. N\u00f3s explicamos tudo.',
+  'howItWorks.step3': 'Aponta a c\u00e2mara e pronto',
+  'howItWorks.step3Desc': 'O OpenClaw abre automaticamente. Sincroniza o WhatsApp com o QR code e est\u00e1 feito.',
+
+  // FAQ
+  'faq.title': 'Perguntas frequentes',
+  'faq.subtitle': 'Tudo o que precisas de saber.',
+  'faq.q1': 'O que \u00e9 o OpenClaw?',
+  'faq.a1': 'O OpenClaw \u00e9 uma ferramenta que automatiza o teu WhatsApp com intelig\u00eancia artificial. Responde a mensagens, gere contactos e executa tarefas \u2014 tudo automaticamente.',
+  'faq.q2': 'Preciso de saber programar?',
+  'faq.a2': 'N\u00e3o. Zero. Nada. Metes o email, pagas, e o OpenClaw instala-se sozinho no teu computador. S\u00f3 precisas de colar a tua API key de IA (OpenAI, Claude ou Gemini) e apontar a c\u00e2mara do telem\u00f3vel ao QR code do WhatsApp.',
+  'faq.q3': 'O que \u00e9 uma API key?',
+  'faq.a3': '\u00c9 uma chave que liga o OpenClaw a um servi\u00e7o de intelig\u00eancia artificial (como o ChatGPT ou o Claude). Crias uma conta gratuita no provedor, geras a chave, e colas no OpenClaw. N\u00f3s guiamos-te passo a passo durante a instala\u00e7\u00e3o.',
+  'faq.q4': 'Funciona em que sistemas?',
+  'faq.a4': 'Windows, macOS e Linux. O site deteta automaticamente o teu sistema operativo e descarrega a vers\u00e3o correta.',
+  'faq.q5': 'Os meus dados est\u00e3o seguros?',
+  'faq.a5': 'Sim. O OpenClaw corre 100% no teu computador. As tuas mensagens, contactos e API key nunca saem da tua m\u00e1quina. N\u00e3o temos acesso a nada.',
+  'faq.q6': 'E se precisar de ajuda?',
+  'faq.a6': 'Envia-nos um email para suporte@openclaw.io ou contacta-nos pelo WhatsApp. Respondemos em menos de 24 horas.',
+
+  // Footer
+  'footer.rights': 'Todos os direitos reservados.',
+  'footer.terms': 'Termos',
+  'footer.privacy': 'Privacidade',
+  'footer.support': 'Suporte',
+
+  // Dashboard
+  'dashboard.title': 'Dashboard',
+  'dashboard.subtitle': 'Gere as tuas integra\u00e7\u00f5es e automa\u00e7\u00f5es.',
+  'dashboard.integrations': 'Integra\u00e7\u00f5es',
+  'dashboard.services': 'Servi\u00e7os',
+  'dashboard.active': 'Activo',
+  'dashboard.inactive': 'Inactivo',
+  'dashboard.alerts': 'Alertas',
+  'dashboard.connected': 'Ligado',
+  'dashboard.disconnected': 'Desligado',
+  'dashboard.connect': 'Conectar',
+  'dashboard.update': 'Actualizar',
+  'dashboard.saved': 'Guardado',
+  'dashboard.configure': 'Configurar',
+  'dashboard.close': 'Fechar',
+  'dashboard.generateQR': 'Gerar QR Code',
+  'dashboard.qrPlaceholder': 'QR Code aparece aqui',
+  'dashboard.needHelp': 'Precisas de ajuda?',
+  'dashboard.helpText': 'Cada integra\u00e7\u00e3o funciona de forma independente. Activa apenas as que precisas. O OpenClaw gere tudo no piloto autom\u00e1tico depois de configurado.',
+  'dashboard.linked': 'ligados',
+  'dashboard.testing': 'A testar...',
+  'dashboard.testSuccess': 'Conex\u00e3o bem sucedida!',
+  'dashboard.testFailed': 'Falha na conex\u00e3o',
+
+  // Connect page
+  'connect.title': 'Conectar WhatsApp',
+  'connect.subtitle': 'J\u00e1 tens o OpenClaw instalado? Segue estes passos para ligar o teu WhatsApp.',
+  'connect.step1Title': 'Abre o terminal do OpenClaw',
+  'connect.step1Desc': 'No teu computador, abre a aplica\u00e7\u00e3o OpenClaw ou o terminal onde o gateway est\u00e1 a correr.',
+  'connect.step2Title': 'Configura a API key (se ainda n\u00e3o fizeste)',
+  'connect.step2Desc': 'O OpenClaw precisa de uma API key de IA (OpenAI, Claude ou Gemini) para funcionar.',
+  'connect.step3Title': 'Conecta o WhatsApp',
+  'connect.step3Desc': 'Corre o comando abaixo no terminal. Um QR code vai aparecer.',
+  'connect.step4Title': 'Aponta a c\u00e2mara',
+  'connect.step4Desc': 'No telem\u00f3vel: WhatsApp \u203a Defini\u00e7\u00f5es \u203a Dispositivos ligados \u203a Ligar dispositivo \u203a Aponta ao QR code.',
+  'connect.step5Title': 'Pronto!',
+  'connect.step5Desc': 'O OpenClaw est\u00e1 ligado ao teu WhatsApp. Envia uma mensagem para testar.',
+  'connect.problems': 'Problemas?',
+  'connect.qrExpires': 'O QR code expira ao fim de 60 segundos \u2014 corre o comando novamente se necess\u00e1rio',
+  'connect.checkGateway': 'Certifica-te que o OpenClaw gateway est\u00e1 a correr',
+  'connect.contactUs': 'Contacta-nos:',
+  'connect.copied': 'Copiado!',
+  'connect.copy': 'Copiar',
+} as const;
+
+export type TranslationKeys = keyof typeof pt;
+export default pt;

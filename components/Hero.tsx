@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { detectOS } from '@/lib/detectOS';
 import { Loader2, Zap, Users } from 'lucide-react';
+import { useTranslation } from '@/lib/hooks/useTranslation';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const GreenArrow = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -86,6 +88,7 @@ function formatLocalPrice(countryCode: string): string {
 }
 
 export default function Hero() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [os, setOs] = useState('');
   const [loading, setLoading] = useState(false);
@@ -112,7 +115,7 @@ export default function Hero() {
 
   const handleStart = async () => {
     if (!email || !email.includes('@')) {
-      setError('Introduz um email válido.');
+      setError(t('hero.invalidEmail'));
       return;
     }
 
@@ -145,23 +148,26 @@ export default function Hero() {
           <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/openclaw-dark.png" alt="OpenClaw" width={28} height={28} />
           <span className="font-semibold text-white">OpenClaw</span>
         </div>
-        <a href="/connect" className="px-4 py-2 text-sm text-gray-400 hover:text-white border border-[#1A1D2B] rounded-lg hover:border-[#2A2D3B] transition-all">
-          Já tenho instalado
-        </a>
+        <div className="flex items-center gap-3">
+          <LanguageSwitcher />
+          <a href="/connect" className="px-4 py-2 text-sm text-gray-400 hover:text-white border border-[#1A1D2B] rounded-lg hover:border-[#2A2D3B] transition-all">
+            {t('nav.alreadyInstalled')}
+          </a>
+        </div>
       </nav>
 
       {/* Hero Content */}
       <div className="relative z-10 w-full max-w-2xl mx-auto text-center mt-12">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
-          O teu WhatsApp com IA,
+          {t('hero.title1')}
           <br />
           <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-            a funcionar 24/7
+            {t('hero.title2')}
           </span>
         </h1>
 
         <p className="mt-6 text-gray-400 text-lg max-w-lg mx-auto">
-          Mete o email e o OpenClaw trata do resto. Respostas automáticas, gestão de contactos, websites, redes sociais — tudo no piloto automático.
+          {t('hero.subtitle')}
         </p>
 
         {/* Main CTA Card */}
@@ -171,7 +177,7 @@ export default function Hero() {
               type="email"
               value={email}
               onChange={(e) => { setEmail(e.target.value); setError(''); }}
-              placeholder="o-teu@email.com"
+              placeholder={t('hero.emailPlaceholder')}
               className="flex-1 px-4 py-3.5 bg-[#08090E] border border-[#1A1D2B] rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50 transition font-sans"
               onKeyDown={(e) => e.key === 'Enter' && handleStart()}
             />
@@ -183,7 +189,7 @@ export default function Hero() {
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                <><Zap className="w-4 h-4" /> Começar</>
+                <><Zap className="w-4 h-4" /> {t('hero.cta')}</>
               )}
             </button>
           </div>
@@ -195,16 +201,16 @@ export default function Hero() {
         <div className="mt-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { content: <GreenArrow />, label: 'Stock & Crypto Trader' },
-              { content: <ClawLobster />, label: 'Assistente Pessoal' },
-              { content: <SocialIcons />, label: 'Redes Sociais' },
-              { content: <MessagingIcons />, label: 'WhatsApp / Telegram' },
+              { content: <GreenArrow />, label: t('templates.trader') },
+              { content: <ClawLobster />, label: t('templates.assistant') },
+              { content: <SocialIcons />, label: t('templates.social') },
+              { content: <MessagingIcons />, label: t('templates.messaging') },
             ].map(({ content, label }) => (
               <button
                 key={label}
                 onClick={() => {
                   if (!email) {
-                    setError('Introduz o email primeiro.');
+                    setError(t('hero.emailFirst'));
                     return;
                   }
                   handleStart();
@@ -221,14 +227,14 @@ export default function Hero() {
         {/* Trust + Stats */}
         <div className="mt-10 flex items-center justify-center gap-2 text-sm text-gray-500">
           <Users className="w-4 h-4" />
-          <span>Usado por <span className="text-white font-medium">1.200+</span> utilizadores</span>
+          <span>{t('hero.usedBy')} <span className="text-white font-medium">1.200+</span> {t('hero.users')}</span>
         </div>
 
         <div className="mt-8 grid grid-cols-3 gap-6 text-center">
           {[
-            { title: 'Corre 24/7', sub: 'No teu computador' },
-            { title: 'Os teus dados', sub: 'Ficam na tua máquina' },
-            { title: 'Qualquer IA', sub: 'OpenAI, Claude, Gemini' },
+            { title: t('hero.runs247'), sub: t('hero.onYourPC') },
+            { title: t('hero.yourData'), sub: t('hero.staysLocal') },
+            { title: t('hero.anyAI'), sub: 'OpenAI, Claude, Gemini' },
           ].map((stat) => (
             <div key={stat.title}>
               <p className="text-white font-medium text-sm">{stat.title}</p>
@@ -239,7 +245,7 @@ export default function Hero() {
 
         {os && (
           <p className="mt-6 text-gray-600 text-xs">
-            Detetámos que usas{' '}
+            {t('hero.detectedOS')}{' '}
             <span className="text-blue-400 font-medium">
               {os === 'windows' ? 'Windows' : os === 'macos' ? 'macOS' : os === 'linux' ? 'Linux' : 'Desktop'}
             </span>{' '}✓

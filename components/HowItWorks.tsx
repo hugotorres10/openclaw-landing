@@ -1,16 +1,24 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { STEPS } from '@/lib/constants';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 export default function HowItWorks() {
+  const { t } = useTranslation();
+
+  const steps = [
+    { number: '1', title: t('howItWorks.step1'), description: t('howItWorks.step1Desc') },
+    { number: '2', title: t('howItWorks.step2'), description: t('howItWorks.step2Desc') },
+    { number: '3', title: t('howItWorks.step3'), description: t('howItWorks.step3Desc') },
+  ];
+
   return (
     <section className="py-24 px-6">
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold text-white text-center mb-4">Como funciona?</h2>
-        <p className="text-gray-500 text-center mb-16 max-w-md mx-auto">Três passos. Sem complicações.</p>
+        <h2 className="text-3xl font-bold text-white text-center mb-4">{t('howItWorks.title')}</h2>
+        <p className="text-gray-500 text-center mb-16 max-w-md mx-auto">{t('howItWorks.subtitle')}</p>
         <div className="space-y-6">
-          {STEPS.map((step, i) => (
+          {steps.map((step, i) => (
             <motion.div
               key={step.number}
               initial={{ opacity: 0, x: -20 }}

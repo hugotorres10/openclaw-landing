@@ -2,7 +2,7 @@
 
 import { Zap, MessageSquare, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { FEATURES } from '@/lib/constants';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 const iconMap: Record<string, React.ElementType> = {
   Zap,
@@ -11,13 +11,21 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 export default function Features() {
+  const { t } = useTranslation();
+
+  const features = [
+    { icon: 'Zap', title: t('features.autoInstall'), description: t('features.autoInstallDesc') },
+    { icon: 'MessageSquare', title: t('features.whatsappAI'), description: t('features.whatsappAIDesc') },
+    { icon: 'Shield', title: t('features.privacy'), description: t('features.privacyDesc') },
+  ];
+
   return (
     <section className="py-24 px-6 relative">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-white text-center mb-4">Tudo o que precisas</h2>
-        <p className="text-gray-500 text-center mb-12 max-w-lg mx-auto">O OpenClaw automatiza o teu WhatsApp com inteligência artificial. Zero configuração.</p>
+        <h2 className="text-3xl font-bold text-white text-center mb-4">{t('features.title')}</h2>
+        <p className="text-gray-500 text-center mb-12 max-w-lg mx-auto">{t('features.subtitle')}</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {FEATURES.map((feature, i) => {
+          {features.map((feature, i) => {
             const Icon = iconMap[feature.icon];
             return (
               <motion.div

@@ -1,8 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Power, PowerOff, Check, Bell, BellOff, Menu, X } from 'lucide-react';
+import { Power, PowerOff, Check, Bell, BellOff, Menu, X, Loader2 } from 'lucide-react';
+import { useTranslation } from '@/lib/hooks/useTranslation';
+import type { TranslationKeys } from '@/lib/translations/pt';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 /* ── SVG Icons ── */
 const GreenArrow = () => (
@@ -224,14 +228,45 @@ const INITIAL: Integration[] = [
 ];
 
 /* ── Service Config Card ── */
-function ServiceCard({ service, onToggle }: { service: SubService; onToggle: () => void }) {
+function ServiceCard({ service, onToggle, email, category, t }: { service: SubService; onToggle: () => void; email: string; category: string; t: (key: TranslationKeys) => string }) {
   const [values, setValues] = useState<Record<string, string>>({});
+  const [saving, setSaving] = useState(false);
+  const [testing, setTesting] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [testResult, setTestResult] = useState<{ success: boolean; error?: string } | null>(null);
 
-  const handleSave = () => {
-    setSaved(true);
-    onToggle();
-    setTimeout(() => setSaved(false), 2000);
+  const handleSave = async () => {
+    setSaving(true);
+    setTestResult(null);
+    try {
+      // 1. Save credentials to DB
+      await fetch('/api/integrations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, serviceId: service.id, category, credentials: values }),
+      });
+
+      // 2. Test the connection
+      setTesting(true);
+      const testRes = await fetch('/api/integrations/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, serviceId: service.id }),
+      });
+      const testData = await testRes.json();
+      setTestResult(testData);
+
+      if (testData.success) {
+        setSaved(true);
+        onToggle();
+        setTimeout(() => setSaved(false), 3000);
+      }
+    } catch {
+      setTestResult({ success: false, error: t('dashboard.testFailed') });
+    } finally {
+      setSaving(false);
+      setTesting(false);
+    }
   };
 
   if (service.id === 'whatsapp') {
@@ -244,16 +279,16 @@ function ServiceCard({ service, onToggle }: { service: SubService; onToggle: () 
             <p className="text-gray-500 text-xs">{service.description}</p>
           </div>
           <span className={`text-xs px-3 py-1 rounded-full font-medium ${service.connected ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-gray-500/10 text-gray-500 border border-gray-500/20'}`}>
-            {service.connected ? 'Ligado' : 'Desligado'}
+            {service.connected ? t('dashboard.connected') : t('dashboard.disconnected')}
           </span>
         </div>
         {!service.connected && (
           <div className="flex flex-col items-center gap-4 p-8 border border-dashed border-[#1A1D2B] rounded-xl bg-[#0D0F17]/50">
             <div className="w-40 h-40 bg-white rounded-xl flex items-center justify-center">
-              <span className="text-gray-400 text-xs text-center px-4">QR Code aparece aqui</span>
+              <span className="text-gray-400 text-xs text-center px-4">{t('dashboard.qrPlaceholder')}</span>
             </div>
             <button onClick={onToggle} className="px-6 py-2.5 bg-green-600 hover:bg-green-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer">
-              Gerar QR Code
+              {t('dashboard.generateQR')}
             </button>
           </div>
         )}
@@ -270,7 +305,7 @@ function ServiceCard({ service, onToggle }: { service: SubService; onToggle: () 
           <p className="text-gray-500 text-xs">{service.description}</p>
         </div>
         <span className={`text-xs px-3 py-1 rounded-full font-medium ${service.connected ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-gray-500/10 text-gray-500 border border-gray-500/20'}`}>
-          {service.connected ? 'Ligado' : 'Desligado'}
+          {service.connected ? t('dashboard.connected') : t('dashboard.disconnected')}
         </span>
       </div>
       <div className="space-y-3">
@@ -288,30 +323,100 @@ function ServiceCard({ service, onToggle }: { service: SubService; onToggle: () 
         ))}
         <button
           onClick={handleSave}
-          className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
+          disabled={saving || testing}
+          className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
         >
-          {saved ? <><Check className="w-4 h-4" /> Guardado</> : service.connected ? 'Actualizar' : 'Conectar'}
+          {saving && !testing ? `${t('dashboard.saved')}...` : testing ? `${t('dashboard.testing')}` : saved ? <><Check className="w-4 h-4" /> {t('dashboard.testSuccess')}</> : service.connected ? t('dashboard.update') : t('dashboard.connect')}
         </button>
+        {testResult && !testResult.success && (
+          <p className="mt-2 text-red-400 text-xs">{testResult.error || t('dashboard.testFailed')}</p>
+        )}
+        {testResult && testResult.success && (
+          <p className="mt-2 text-green-400 text-xs">{t('dashboard.testSuccess')}</p>
+        )}
       </div>
     </div>
   );
 }
 
 /* ── Main Page ── */
-export default function DashboardPage() {
+export default function DashboardWrapper() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#08090E] flex items-center justify-center"><Loader2 className="w-6 h-6 text-blue-400 animate-spin" /></div>}>
+      <DashboardPage />
+    </Suspense>
+  );
+}
+
+function DashboardPage() {
+  const { t } = useTranslation();
+  const searchParams = useSearchParams();
+  const email = searchParams.get('email') || '';
   const [integrations, setIntegrations] = useState(INITIAL);
   const [activeId, setActiveId] = useState('trader');
   const [mobileMenu, setMobileMenu] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Load integrations from DB on mount
+  const loadIntegrations = useCallback(async () => {
+    if (!email) { setLoading(false); return; }
+    try {
+      const res = await fetch(`/api/integrations?email=${encodeURIComponent(email)}`);
+      if (!res.ok) { setLoading(false); return; }
+      const data = await res.json();
+      if (data.integrations?.length > 0) {
+        setIntegrations((prev) => prev.map((integration) => {
+          const dbServices = data.integrations.filter((db: { category: string }) => db.category === integration.id);
+          if (dbServices.length === 0) return integration;
+          return {
+            ...integration,
+            enabled: dbServices.some((db: { enabled: boolean }) => db.enabled),
+            subServices: integration.subServices.map((sub) => {
+              const dbSub = dbServices.find((db: { serviceId: string }) => db.serviceId === sub.id);
+              return dbSub ? { ...sub, connected: dbSub.connected } : sub;
+            }),
+          };
+        }));
+      }
+    } catch { /* ignore */ }
+    setLoading(false);
+  }, [email]);
+
+  useEffect(() => { loadIntegrations(); }, [loadIntegrations]);
 
   const active = integrations.find((i) => i.id === activeId)!;
-  const activeIdx = integrations.findIndex((i) => i.id === activeId);
 
   const updateIntegration = (updated: Integration) => {
     setIntegrations((prev) => prev.map((i) => (i.id === updated.id ? updated : i)));
   };
 
-  const toggleEnabled = () => updateIntegration({ ...active, enabled: !active.enabled });
-  const toggleNotifications = () => updateIntegration({ ...active, notifications: !active.notifications });
+  const toggleEnabled = async () => {
+    updateIntegration({ ...active, enabled: !active.enabled });
+    if (email) {
+      // Toggle all sub-services enabled state
+      for (const sub of active.subServices) {
+        await fetch('/api/integrations/toggle', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, serviceId: sub.id, field: 'enabled' }),
+        });
+      }
+    }
+  };
+
+  const toggleNotifications = async () => {
+    updateIntegration({ ...active, notifications: !active.notifications });
+    if (email) {
+      for (const sub of active.subServices) {
+        await fetch('/api/integrations/toggle', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, serviceId: sub.id, field: 'notifications' }),
+        });
+      }
+    }
+  };
+
   const toggleSubService = (idx: number) => {
     const updated = { ...active, subServices: active.subServices.map((s, i) => i === idx ? { ...s, connected: !s.connected } : s) };
     updateIntegration(updated);
@@ -331,9 +436,10 @@ export default function DashboardPage() {
             <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/openclaw-dark.png" alt="OpenClaw" width={24} height={24} />
             <span className="font-semibold text-white text-sm">OpenClaw</span>
           </a>
+          <LanguageSwitcher />
         </div>
         <a href="/" className="text-xs text-gray-500 hover:text-gray-300 transition-colors">
-          Voltar ao site
+          {t('nav.backToSite')}
         </a>
       </nav>
 
@@ -341,7 +447,7 @@ export default function DashboardPage() {
         {/* Sidebar - Desktop */}
         <aside className="hidden lg:flex w-64 flex-col fixed top-[49px] left-0 bottom-0 bg-[#0A0B10] border-r border-[#1A1D2B]/50">
           <div className="p-4">
-            <p className="text-[10px] uppercase tracking-widest text-gray-600 mb-3 px-3">Integrações</p>
+            <p className="text-[10px] uppercase tracking-widest text-gray-600 mb-3 px-3">{t('dashboard.integrations')}</p>
             <div className="space-y-1">
               {integrations.map((item) => {
                 const isActive = item.id === activeId;
@@ -364,8 +470,8 @@ export default function DashboardPage() {
                         {item.shortTitle}
                       </p>
                       <p className="text-[10px] text-gray-600">
-                        {connected}/{item.subServices.length} ligados
-                        {item.enabled && <span className="text-green-400 ml-1.5">activo</span>}
+                        {connected}/{item.subServices.length} {t('dashboard.linked')}
+                        {item.enabled && <span className="text-green-400 ml-1.5">{t('dashboard.active').toLowerCase()}</span>}
                       </p>
                     </div>
                   </button>
@@ -376,7 +482,7 @@ export default function DashboardPage() {
 
           <div className="mt-auto p-4 border-t border-[#1A1D2B]/50">
             <a href="mailto:suporte@openclaw.io" className="text-xs text-gray-600 hover:text-gray-400 transition-colors">
-              Precisas de ajuda?
+              {t('dashboard.needHelp')}
             </a>
           </div>
         </aside>
@@ -392,7 +498,7 @@ export default function DashboardPage() {
               className="lg:hidden fixed top-[49px] left-0 bottom-0 w-64 bg-[#0A0B10] border-r border-[#1A1D2B]/50 z-40"
             >
               <div className="p-4">
-                <p className="text-[10px] uppercase tracking-widest text-gray-600 mb-3 px-3">Integrações</p>
+                <p className="text-[10px] uppercase tracking-widest text-gray-600 mb-3 px-3">{t('dashboard.integrations')}</p>
                 <div className="space-y-1">
                   {integrations.map((item) => {
                     const isActive = item.id === activeId;
@@ -410,7 +516,7 @@ export default function DashboardPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className={`text-sm font-medium truncate ${isActive ? 'text-white' : 'text-gray-400'}`}>{item.shortTitle}</p>
-                          <p className="text-[10px] text-gray-600">{connected}/{item.subServices.length} ligados</p>
+                          <p className="text-[10px] text-gray-600">{connected}/{item.subServices.length} {t('dashboard.linked')}</p>
                         </div>
                       </button>
                     );
@@ -448,7 +554,7 @@ export default function DashboardPage() {
                     ? <Power className="w-4 h-4 text-green-400" />
                     : <PowerOff className="w-4 h-4 text-gray-600" />}
                   <span className={`text-sm ${active.enabled ? 'text-green-400 font-medium' : 'text-gray-600'}`}>
-                    {active.enabled ? 'Activo' : 'Inactivo'}
+                    {active.enabled ? t('dashboard.active') : t('dashboard.inactive')}
                   </span>
                 </button>
 
@@ -458,21 +564,21 @@ export default function DashboardPage() {
                   {active.notifications
                     ? <Bell className="w-4 h-4 text-blue-400" />
                     : <BellOff className="w-4 h-4 text-gray-600" />}
-                  <span className="text-sm text-gray-500">Alertas</span>
+                  <span className="text-sm text-gray-500">{t('dashboard.alerts')}</span>
                 </button>
 
                 <div className="w-px h-5 bg-[#1A1D2B]" />
 
                 <span className="text-sm text-gray-500">
-                  <span className="text-white font-medium">{connectedCount}</span>/{active.subServices.length} serviços
+                  <span className="text-white font-medium">{connectedCount}</span>/{active.subServices.length} {t('dashboard.services').toLowerCase()}
                 </span>
               </div>
 
               {/* Sub-services */}
               <div className="space-y-4">
-                <p className="text-xs uppercase tracking-widest text-gray-600">Serviços</p>
+                <p className="text-xs uppercase tracking-widest text-gray-600">{t('dashboard.services')}</p>
                 {active.subServices.map((sub, idx) => (
-                  <ServiceCard key={sub.id} service={sub} onToggle={() => toggleSubService(idx)} />
+                  <ServiceCard key={sub.id} service={sub} email={email} category={active.id} onToggle={() => toggleSubService(idx)} t={t} />
                 ))}
               </div>
             </motion.div>

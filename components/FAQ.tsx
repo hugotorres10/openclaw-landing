@@ -3,18 +3,28 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FAQ_ITEMS } from '@/lib/constants';
+import { useTranslation } from '@/lib/hooks/useTranslation';
 
 export default function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
+  const { t } = useTranslation();
+
+  const faqItems = [
+    { question: t('faq.q1'), answer: t('faq.a1') },
+    { question: t('faq.q2'), answer: t('faq.a2') },
+    { question: t('faq.q3'), answer: t('faq.a3') },
+    { question: t('faq.q4'), answer: t('faq.a4') },
+    { question: t('faq.q5'), answer: t('faq.a5') },
+    { question: t('faq.q6'), answer: t('faq.a6') },
+  ];
 
   return (
     <section className="py-24 px-6">
       <div className="max-w-2xl mx-auto">
-        <h2 className="text-3xl font-bold text-white text-center mb-4">Perguntas frequentes</h2>
-        <p className="text-gray-500 text-center mb-12">Tudo o que precisas de saber.</p>
+        <h2 className="text-3xl font-bold text-white text-center mb-4">{t('faq.title')}</h2>
+        <p className="text-gray-500 text-center mb-12">{t('faq.subtitle')}</p>
         <div className="space-y-3">
-          {FAQ_ITEMS.map((item, i) => (
+          {faqItems.map((item, i) => (
             <div
               key={i}
               className="rounded-xl border border-[#1A1D2B] bg-[#0D0F17] overflow-hidden hover:border-[#2A2D3B] transition-all"
