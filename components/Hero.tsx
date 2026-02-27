@@ -110,7 +110,7 @@ export default function Hero() {
         </h1>
 
         <p className="mt-6 text-gray-400 text-lg max-w-lg mx-auto">
-          Mete o email e o OpenClaw trata do resto. Respostas automáticas, gestão de contactos — tudo no piloto automático.
+          Mete o email e o OpenClaw trata do resto. Respostas automáticas, gestão de contactos, websites, redes sociais — tudo no piloto automático.
         </p>
 
         {/* Main CTA Card */}
