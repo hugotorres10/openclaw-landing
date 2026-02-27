@@ -52,7 +52,7 @@ export const STEPS = [
   {
     number: '1',
     title: 'Mete o teu email e paga',
-    description: 'Pagamento único de 9,99 USDC. Sem subscrições.',
+    description: 'Pagamento único de €9,99. Preço adaptado à tua moeda local.',
   },
   {
     number: '2',

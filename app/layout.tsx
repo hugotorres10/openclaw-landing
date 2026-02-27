@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: "Mete o email, paga, e nós tratamos do resto. Instalação 100% automática. Sem configurações. Sem terminal.",
   openGraph: {
     title: "OpenClaw — Automatiza o teu WhatsApp com IA",
-    description: "Instalação 100% automática. Mete o email, paga 9,99 USDC, e o OpenClaw faz o resto.",
+    description: "Instalação 100% automática. Mete o email, paga €9,99, e o OpenClaw faz o resto.",
     type: "website",
   },
 };

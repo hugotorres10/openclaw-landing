@@ -48,15 +48,66 @@ const MessagingIcons = () => (
 );
 
 
+const CURRENCY_MAP: Record<string, { symbol: string; code: string; rate: number }> = {
+  US: { symbol: '$', code: 'USD', rate: 1.08 },
+  GB: { symbol: '£', code: 'GBP', rate: 0.86 },
+  JP: { symbol: '¥', code: 'JPY', rate: 162 },
+  CN: { symbol: '¥', code: 'CNY', rate: 7.8 },
+  BR: { symbol: 'R$', code: 'BRL', rate: 5.4 },
+  IN: { symbol: '₹', code: 'INR', rate: 90 },
+  CH: { symbol: 'CHF', code: 'CHF', rate: 0.96 },
+  AU: { symbol: 'A$', code: 'AUD', rate: 1.66 },
+  CA: { symbol: 'C$', code: 'CAD', rate: 1.47 },
+  SE: { symbol: 'kr', code: 'SEK', rate: 11.2 },
+  NO: { symbol: 'kr', code: 'NOK', rate: 11.5 },
+  DK: { symbol: 'kr', code: 'DKK', rate: 7.46 },
+  PL: { symbol: 'zł', code: 'PLN', rate: 4.32 },
+  CZ: { symbol: 'Kč', code: 'CZK', rate: 25.2 },
+  HU: { symbol: 'Ft', code: 'HUF', rate: 395 },
+  RO: { symbol: 'lei', code: 'RON', rate: 4.97 },
+  TR: { symbol: '₺', code: 'TRY', rate: 34.5 },
+  SA: { symbol: '﷼', code: 'SAR', rate: 4.05 },
+  AE: { symbol: 'د.إ', code: 'AED', rate: 3.97 },
+  KR: { symbol: '₩', code: 'KRW', rate: 1420 },
+  MX: { symbol: '$', code: 'MXN', rate: 18.5 },
+  AR: { symbol: '$', code: 'ARS', rate: 920 },
+  ZA: { symbol: 'R', code: 'ZAR', rate: 19.8 },
+  RU: { symbol: '₽', code: 'RUB', rate: 98 },
+};
+
+const BASE_PRICE_EUR = 9.99;
+
+function formatLocalPrice(countryCode: string): string {
+  const currency = CURRENCY_MAP[countryCode];
+  if (!currency) return '€9,99';
+  const converted = BASE_PRICE_EUR * currency.rate;
+  const formatted = converted >= 100 ? Math.round(converted).toLocaleString() : converted.toFixed(2).replace('.', ',');
+  return `${currency.symbol}${formatted}`;
+}
+
 export default function Hero() {
   const [email, setEmail] = useState('');
   const [os, setOs] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [price, setPrice] = useState('€9,99');
 
   useEffect(() => {
     const detected = detectOS();
     setOs(detected.os);
+
+    // Detect country via timezone/locale
+    fetch('https://ipapi.co/json/')
+      .then(r => r.json())
+      .then(data => {
+        if (data.country_code) {
+          const local = formatLocalPrice(data.country_code);
+          if (local !== '€9,99') {
+            setPrice(`${local} (~€9,99)`);
+          }
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const handleStart = async () => {
@@ -137,7 +188,7 @@ export default function Hero() {
             </button>
           </div>
           {error && <p className="mt-2 text-red-400 text-sm">{error}</p>}
-          <p className="mt-3 text-gray-600 text-xs">9,99 USDC · Pagamento único · Sem subscrição</p>
+          <p className="mt-3 text-gray-600 text-xs">{price}</p>
         </div>
 
         {/* Templates */}
